@@ -104,4 +104,4 @@ Runs `hyprctl setcursor <current theme> <size>`.
 
 ## License
 
-Add your license of choice here (e.g. MIT).
+MIT.
