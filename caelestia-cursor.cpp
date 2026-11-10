@@ -115,7 +115,7 @@ int main(int argc, char* argv[]) {
             cout << "Use: Caelestia-Cursor [OPTION] Value\n" << endl; 
             cout << "--help or -H : Prints this manual" << endl;
             cout << "--set-size or -S SIZE : Sets the cursor to the size refered in SIZE (SIZE is the INTEGER size in pixels of the cursor) " << endl;
-            cout << "--set-theme or -T THEME-NAME : Sets the theme by its givven name (NOT THE FOLDER NAME) Tip: check the index.html of that theme for the name" << endl;
+            cout << "--set-theme or -T THEME-NAME : Sets the theme by it's folder name" << endl;
             cout << "--current-theme or -C : Prints the current cursor theme" << endl;
         }
         else if(option == "--current-theme" || option == "-C"){
