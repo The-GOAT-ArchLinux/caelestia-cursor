@@ -112,7 +112,9 @@ int main(int argc, char* argv[]) {
             string command = "hyprctl setcursor";
             command = command + getCurrTheme() + argv[2];
 
-            cout << runCommand(command.c_str()) << endl; 
+            cout << command << endl;
+
+            // cout << runCommand(command.c_str()) << endl; 
         }
         else if(option == "--set-theme" || option == "-T"){
             if (argc < 3) {
@@ -164,6 +166,8 @@ int main(int argc, char* argv[]) {
                     for(const auto& i: lines){
                         file << i << '\n';
                     }
+                    file.close();
+                    cout << "The cursor theme has been changed to: " + string(argv[2]) << endl;
                     
                 }
                 else cout << "Cursor theme config line not found on the config file! \nAre you using caelestia? \n\tIf yes, did you update it?\n\tYou can update caelestia using 'caelestia update'." << endl;
