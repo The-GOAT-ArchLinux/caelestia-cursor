@@ -57,6 +57,24 @@ string getCurrTheme(){
     return raw_output.substr(quoteStart + 1, quoteEnd - quoteStart - 1);
 }
 
+string getCurrThemeSize(){
+    string raw_output = runCommand("cat ~/.config/hypr/variables.lua | grep 'cursorSize'");
+
+    const size_t eq = raw_output.find('=');
+    if (eq == string::npos) return "24";
+
+    const size_t comma = raw_output.find(',', eq);
+    if (comma == string::npos) return "24";
+
+    string val = raw_output.substr(eq + 1, comma - eq - 1);
+
+    const size_t first = val.find_first_not_of(" \t");
+    const size_t last  = val.find_last_not_of(" \t\r\n");
+    if (first == string::npos) return "24";
+
+    return val.substr(first, last - first + 1);
+}
+
 bool is_member_of(const string& element, const vector<string>& list) {
     return find(list.begin(), list.end(), element) != list.end();
 }
@@ -110,11 +128,9 @@ int main(int argc, char* argv[]) {
             }
 
             string command = "hyprctl setcursor";
-            command = command + getCurrTheme() + argv[2];
+            command = command + " " + getCurrTheme() + " " + argv[2];
 
-            cout << command << endl;
-
-            // cout << runCommand(command.c_str()) << endl; 
+            cout << runCommand(command.c_str()) << endl;
         }
         else if(option == "--set-theme" || option == "-T"){
             if (argc < 3) {
@@ -131,7 +147,6 @@ int main(int argc, char* argv[]) {
                 }
             }
             else {
-                cout << "The theme is valid" << endl;
                 const char* home = getenv("HOME");
                 if (home == nullptr || home[0] == '\0') {
                     cerr << "Unable to determine the home directory." << endl;
@@ -156,7 +171,6 @@ int main(int argc, char* argv[]) {
                         cout << "As you did't have a backup of the variables.lua file, a backup has been created for you, and it is located at " + BAK_PATH << endl;
                     }
 
-                    cout << lines[distance(lines.begin(), it)] << endl;
                     lines[distance(lines.begin(), it)] = string("    cursorTheme                = \"") + argv[2] + "\",";
                     
                     string PATH = string(home) + "/.config/hypr/variables.lua";
@@ -167,6 +181,8 @@ int main(int argc, char* argv[]) {
                         file << i << '\n';
                     }
                     file.close();
+                    runCommand(string("hyprctl setcursor " + string(argv[2]) + " " + getCurrThemeSize()).c_str());
+                    runCommand(string("gsettings set org.gnome.desktop.interface cursor-theme '" + string(argv[2]) + "'").c_str());
                     cout << "The cursor theme has been changed to: " + string(argv[2]) << endl;
                     
                 }
